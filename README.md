@@ -18,7 +18,7 @@ type Message = { channel: "vending-machine"; type: TYPE; data: DATA };
 
 The vending machine will emit the following messages through [`window.postMessage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage):
 
-### Sending 
+### Messages 
 
 #### Print to display
 Type: `print`
@@ -49,16 +49,27 @@ Type: `get-available-coins`
 Parameters (NONE)
 
 Will prompt the vending machine to send a message containing the current amount of coins for each type of currency.
-The vending machine will send a message of type `available-coins`, the `data` field contains a JSON like this:
-```json
-{ "1": 1, "2": 4, "5": 8, "10": 5, "20": 6, "50": 1, "100": 6, "200": 3 }
-```
+The vending machine will send a message of type `available-coins`, the `data` field contains a JSON string, more details below.
 An event handler must be set in place to handle this response.
 
 
-### Emitted message
-fanculo mirko
+### Emitted messages
+The following messages will be sent by the vending machine, and you'll be able to handle them.
 
-#### Handle button clicks
-Type: `get-available-coins`
-Parameters (1)
+
+#### The user clicks on a button
+type: `input`
+data (1): The user input (eg. "0","1","REFUND","CANC")
+
+#### The user inserts a coin
+type: `coin-inserted`
+data (1): The inserted coin value (eg. "10","100","200")
+
+
+#### Handle `get-available-coins` response
+Type: `available-coins`
+data (1): A JSON string containing data about currencies availability
+Example:
+```json
+{ "1": 1, "2": 4, "5": 8, "10": 5, "20": 6, "50": 1, "100": 6, "200": 3 }
+```
