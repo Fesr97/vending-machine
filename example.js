@@ -11,8 +11,6 @@ export const handleMessage = (type, callback = (...data) => {}) => {
     callback(...e.data.data);
   });
 };
-
-// Will log the available currency on the console
-handleMessage("get-available-currency", (res) => console.log(res));
-
-sendMessage("available-currency");
+// To test messages you could setup something like this
+// window.sendMessage = sendMessage;
+// window.handleMessage = handleMessage;
