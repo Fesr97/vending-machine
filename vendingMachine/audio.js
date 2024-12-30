@@ -19,7 +19,6 @@ async function initialize() {
     audio.src = getAudioSrc(name);
     /** @type {Promise<[string, HTMLAudioElement]>}*/
     const promise = new Promise((resolve) => {
-      console.log("loaded audio: ", name);
       audio.oncanplay = () => resolve([name, audio]);
       audio.volume = 0.3;
     });
@@ -32,10 +31,7 @@ async function initialize() {
 
 const audioMap = await initialize();
 handleMessage("audio", (trackName, playbackRate = 1) => {
-  console.log(trackName, playbackRate);
-  console.log(`Playing ${trackName}`);
   const audio = new Audio(audioMap[trackName].src);
   audio.playbackRate = playbackRate;
   audio.play();
 });
-// console.log(ambient)

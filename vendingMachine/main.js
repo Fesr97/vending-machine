@@ -23,7 +23,6 @@ const vendingMachine = new VendingMachine(products);
 
 handleMessage("drop-item", (code) => {
   const item = vendingMachine.slots[code[0]][code[1]];
-  console.log(item);
   if (item.stock < 1) {
     throw new Error("NO STOCK");
   }
