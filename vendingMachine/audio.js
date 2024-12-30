@@ -1,5 +1,13 @@
 import { handleMessage } from "./messages.js";
-const sounds = ["ambient", "coin-insert", "item-drop", "peep", "refund"];
+const sounds = [
+  "ambient",
+  "coin-insert",
+  "item-drop",
+  "peep",
+  "refund",
+  "print",
+  "tear-paper",
+];
 
 function getAudioSrc(name) {
   return import.meta.resolve(`./audio/${name}.mp3`);
@@ -13,7 +21,7 @@ async function initialize() {
     const promise = new Promise((resolve) => {
       console.log("loaded audio: ", name);
       audio.oncanplay = () => resolve([name, audio]);
-      audio.volume=0.3
+      audio.volume = 0.3;
     });
     return promise;
   });
@@ -23,9 +31,11 @@ async function initialize() {
 }
 
 const audioMap = await initialize();
-handleMessage("audio", (trackName) => {
+handleMessage("audio", (trackName, playbackRate = 1) => {
+  console.log(trackName, playbackRate);
   console.log(`Playing ${trackName}`);
-  new Audio(audioMap[trackName].src).play();
-  
+  const audio = new Audio(audioMap[trackName].src);
+  audio.playbackRate = playbackRate;
+  audio.play();
 });
 // console.log(ambient)

@@ -1,10 +1,14 @@
 import { sendMessage, handleMessage } from "./messages.js";
 import { Product } from "./Product.js";
+import { Currency } from "./Currency.js";
+import { Receipt } from "./Receipt.js";
 import config from "./config.js";
+
+const COIN_SIZE = 48;
 
 /** @type {HTMLCanvasElement} */
 export const canvas = document.querySelector(".output-canvas");
-canvas.style.cursor=" grab"
+canvas.style.cursor = " grab";
 const context = canvas.getContext("2d");
 const rect = canvas.getBoundingClientRect();
 canvas.width = rect.width;
@@ -12,7 +16,7 @@ canvas.height = rect.height;
 canvas.style.display = "flex";
 canvas.style.flexGrow = "1";
 
-/** @type {Product[]} */
+/** @type {(Product|Currency|Receipt)[]} */
 const items = [];
 
 const render = () => {
@@ -22,6 +26,11 @@ const render = () => {
   const y = (canvas.height - height) / 2;
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
+    if (item instanceof Currency) {
+      item.y = canvas.height - COIN_SIZE;
+      item.render(context, item.x, item.y, COIN_SIZE, COIN_SIZE);
+      continue;
+    }
     item.y = y;
     item.render(context, item.x, item.y, config.ITEM_WIDTH, config.ITEM_HEIGHT);
   }
@@ -29,6 +38,22 @@ const render = () => {
 handleMessage("item-drop", (...itemParams) => {
   sendMessage("audio", "item-drop");
   const item = new Product(...itemParams);
+  item.x = Math.random() * (canvas.width - config.ITEM_WIDTH);
+  items.push(item);
+  render();
+});
+handleMessage("release-currency", (currency) => {
+  sendMessage("audio", "refund", 1 + 1 - Number(currency) / 200);
+
+  const item = new Currency(currency);
+  item.x = Math.random() * (canvas.width - COIN_SIZE);
+  items.push(item);
+  render();
+});
+handleMessage("emit-receipt", (refundAmount) => {
+  sendMessage("audio", "print");
+
+  const item = new Receipt(refundAmount);
   item.x = Math.random() * (canvas.width - config.ITEM_WIDTH);
   items.push(item);
   render();
@@ -44,7 +69,7 @@ addEventListener("click", (e) => {
     y: e.clientY,
   };
   for (let i = items.length - 1; i >= 0; i--) {
-    const item=items[i]
+    const item = items[i];
     const rect = {
       x: item.x + canvas.offsetLeft,
       y: item.y + canvas.offsetTop,
@@ -52,6 +77,7 @@ addEventListener("click", (e) => {
       h: config.ITEM_HEIGHT,
     };
     if (isPointToRect(point, rect)) {
+      item?.onClick();
       console.log(`Removed item: ${item.name} (${item.price})`);
       items.splice(items.indexOf(item), 1);
       render();

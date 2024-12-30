@@ -40,14 +40,14 @@ export class VendingMachine {
         const slot = this.slots[h][w];
         const spacingW = config.ITEM_WIDTH + 20;
         const spacingH = config.ITEM_HEIGHT + 40;
-        if (slot.stock < 1 || !slot.product) continue;
-        slot.product?.render(
-          context,
-          w * spacingW,
-          h * spacingH,
-          config.ITEM_WIDTH,
-          config.ITEM_HEIGHT
-        );
+        if (slot.stock >= 1)
+          slot.product?.render(
+            context,
+            w * spacingW,
+            h * spacingH,
+            config.ITEM_WIDTH,
+            config.ITEM_HEIGHT
+          );
         context.fillStyle = "white";
         context.font = "normal 24px monospace";
         context.textAlign = "center";

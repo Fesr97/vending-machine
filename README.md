@@ -1,16 +1,53 @@
-### Drop item:
-Will cause an item to drop. The item stock will be reduced by 1.
-### Print text:
-Will cause the display to render the given text
+# VENDING MACHINE 3000
+
+This project simulates (to some extents) an incomplete vending machine.
+The machine won't work by itself. The different components do not have a shared logic, some of them communicate with internal messages, but most of the logic to handle the user flow is missing.
+
+## Messaging API
+
+The API works via _messages_.
+The messages follow this schema:
+
+```ts
+type Message = { channel: "vending-machine"; type: TYPE; data: DATA };
+```
+
+The vending machine will emit the following messages through [`window.postMessage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage):
+
+### Message types
 
 
-Expected behavior:
+#### Print to display
+Type: `print`
+Parameters (1): A string.
 
-Users will input the code of their targeted item.
-If enough credit is present, the machine will drop the selected item. 
-The item is not guaranteed to drop, and when it doesn't the machine will refund the item price into the credit.
-When users will use the refund button, the machine should return the exact currency and subtract it from the credit.
-If the machine has not enough currency to fullfill the refund, it should emit the receipt.
-If there's not enough credit, it will display the price of the item and the current credit.
+Will display the string to the LCD display.
 
-- 
+#### Drop an item 
+Type: `drop-item`
+Parameters (1): The item's code in string form (eg. "01") 
+
+Will prompt the vending machine to drop an item. Will throw an error if the item is out of stock.
+
+#### Drop a coin
+Type: `drop-coin`
+Parameters (1): The value of the coin to drop (eg. "200","100","10","2"...etc)
+
+Will prompt the vending machine to drop an item. Will throw an error if the item is out of stock.
+
+#### Emit a receipt
+Type: `emit-receipt`
+Parameters (1): The due refund amount (eg. 200 means 2€)
+
+The vending machine will emit the receipt, which will include the due amount in its content.
+
+#### Get the amount of available coins of each type
+Type: `get-available-currency`
+Parameters (NONE)
+
+Will prompt the vending machine to send a message containing the current amount of coins for each type of currency.
+The vending machine will send a message of type `available-currency`, the `data` field contains a JSON like this:
+```json
+{ "1": 1, "2": 4, "5": 8, "10": 5, "20": 6, "50": 1, "100": 6, "200": 3 }
+```
+An event handler must be set in place to handle this response.

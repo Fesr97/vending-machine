@@ -1,3 +1,4 @@
+// This is an example on how you could handle the message events
 const CHANNEL_NAME = "vending-machine";
 
 export const sendMessage = (type, ...data) => {
@@ -10,5 +11,8 @@ export const handleMessage = (type, callback = (...data) => {}) => {
     callback(...e.data.data);
   });
 };
-window.handleMessage = handleMessage;
-window.sendMessage = sendMessage;
+
+// Will log the available currency on the console
+handleMessage("get-available-currency", (res) => console.log(res));
+
+sendMessage("available-currency");

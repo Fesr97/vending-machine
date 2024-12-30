@@ -34,11 +34,11 @@ canvas {
   width: 300px;
   font: monospace;
   text-align: center;
-  font-size: 32px;
+  font-size: 24px;
   background-color: black;
   color: green;
   border: 1px solid white;
-  height: fit-content;
+  height: 32px;
 }
 .inputs {
   display: grid;

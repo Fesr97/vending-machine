@@ -20,7 +20,8 @@ const products = [
 ];
 
 const vendingMachine = new VendingMachine(products);
-handleMessage("request-drop", (code) => {
+
+handleMessage("drop-item", (code) => {
   const item = vendingMachine.slots[code[0]][code[1]];
   console.log(item);
   if (item.stock < 1) {
@@ -30,13 +31,9 @@ handleMessage("request-drop", (code) => {
   const params = products.find((product) => {
     return product && product[0] === item.product.name;
   });
-  render()
-  sendMessage("item-drop",...params);
+  render();
+  sendMessage("item-drop", ...params);
 });
-
-window.requestDrop = (code) => {
-  sendMessage("request-drop", code);
-};
 
 /** @param {CanvasRenderingContext2D} context */
 export const clear = () => {
@@ -52,3 +49,9 @@ const initialize = async () => {
   render();
 };
 initialize();
+
+/** @type {HTMLDivElement} */
+const display = document.querySelector(".display");
+handleMessage("print", (text) => {
+  display.value = text;
+});
