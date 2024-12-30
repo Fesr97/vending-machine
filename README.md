@@ -57,7 +57,7 @@ An event handler must be set in place to handle this response.
 
 
 ### Emitted message
-
+fanculo mirko
 
 #### Handle button clicks
 Type: `get-available-coins`
