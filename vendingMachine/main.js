@@ -9,14 +9,14 @@ const context = canvas.getContext("2d");
 
 const products = [
   undefined,
-  ["Lays", 1.25, 0],
-  ["Doritos", 2, 1],
-  ["7UP", 1.65, 2],
-  ["Coca Cola", 1.5, 3],
-  ["Kinder Bueno", 0.6, 4],
-  ["Ritz", 1.8, 5],
-  ["Fruity Snacks", 1.6, 6],
-  ["Skittles", 1.1, 7],
+  ["Lays", 125, 0],
+  ["Doritos", 200, 1],
+  ["7UP", 165, 2],
+  ["Coca Cola", 150, 3],
+  ["Kinder Bueno", 60, 4],
+  ["Ritz", 180, 5],
+  ["Fruity Snacks", 160, 6],
+  ["Skittles", 110, 7],
 ];
 
 const vendingMachine = new VendingMachine(products);
@@ -53,4 +53,15 @@ initialize();
 const display = document.querySelector(".display");
 handleMessage("print", (text) => {
   display.value = text;
+});
+
+handleMessage("get-item-details", (code) => {
+  const item = vendingMachine.slots[code[0]][code[1]];
+  const details = {
+    name: item.product.name,
+    price: item.product.price,
+    stock: item.stock,
+  };
+  console.log(details)
+  sendMessage("item-details", details);
 });
