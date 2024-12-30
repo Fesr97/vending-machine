@@ -19,6 +19,10 @@ handleMessage("get-available-currency", () => {
   sendMessage("available-currency", JSON.stringify(currencies));
 });
 
+handleMessage("coin-insert", (_currency) => {
+  const currency = Number(_currency);
+  currencies[currency]++;
+});
 handleMessage("drop-coin", (_currency) => {
   // Throw error if not enough currency
   const currency = Number(_currency);

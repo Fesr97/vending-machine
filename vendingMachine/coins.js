@@ -22,7 +22,7 @@ const coinButtons = coins.map((value, i) => {
   context.drawImage(spritesheet, SIZE * i, 0, SIZE, SIZE, 0, 0, SIZE, SIZE);
   button.appendChild(canvas);
   button.onclick=()=>{
-    msg.sendMessage("coin",value)
+    msg.sendMessage("coin-insert",value)
     msg.sendMessage("audio","coin-insert")
   }
   return button;

@@ -18,7 +18,7 @@ type Message = { channel: "vending-machine"; type: TYPE; data: DATA };
 
 The vending machine will emit the following messages through [`window.postMessage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage):
 
-### Message types
+### Sending 
 
 #### Print to display
 Type: `print`
@@ -54,3 +54,11 @@ The vending machine will send a message of type `available-coins`, the `data` fi
 { "1": 1, "2": 4, "5": 8, "10": 5, "20": 6, "50": 1, "100": 6, "200": 3 }
 ```
 An event handler must be set in place to handle this response.
+
+
+### Emitted message
+
+
+#### Handle button clicks
+Type: `get-available-coins`
+Parameters (1)
