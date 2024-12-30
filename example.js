@@ -14,3 +14,4 @@ export const handleMessage = (type, callback = (...data) => {}) => {
 // To test messages you could setup something like this
 // window.sendMessage = sendMessage;
 // window.handleMessage = handleMessage;
+
